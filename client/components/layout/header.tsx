@@ -29,6 +29,8 @@ type HeaderProps = {
   user: User | null | undefined;
 };
 
+type HeaderDisclosure = "navigation" | "profile" | "notifications";
+
 export function Brand() {
   return (
     <Link href="/" className="brand">
@@ -43,9 +45,10 @@ export function Brand() {
 
 export function Header({ user }: HeaderProps) {
   const path = usePathname();
-  const [menu, setMenu] = useState(false);
-  const [profile, setProfile] = useState(false);
-  const [notifications, setNotifications] = useState(false);
+  const [disclosure, setDisclosure] = useState<HeaderDisclosure | null>(null);
+  const menu = disclosure === "navigation";
+  const profile = disclosure === "profile";
+  const notifications = disclosure === "notifications";
   const menuTrigger = useRef<HTMLButtonElement>(null);
   const profileTrigger = useRef<HTMLButtonElement>(null);
   const notificationTrigger = useRef<HTMLButtonElement>(null);
@@ -65,31 +68,22 @@ export function Header({ user }: HeaderProps) {
   });
 
   useEffect(() => {
-    setMenu(false);
-    setProfile(false);
-    setNotifications(false);
+    setDisclosure(null);
   }, [path]);
 
   useEffect(() => {
     const click = (e: MouseEvent) => {
-      if (e.target instanceof Element && !e.target.closest(".profile")) {
-        setProfile(false);
-        setNotifications(false);
-      }
-
-      if (e.target instanceof Element && !e.target.closest("header")) {
-        setMenu(false);
-      }
+      if (!disclosure || !(e.target instanceof Element)) return;
+      const boundary = disclosure === "navigation" ? "header" : ".profile";
+      if (!e.target.closest(boundary)) setDisclosure(null);
     };
 
     const key = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && !e.defaultPrevented && disclosure) {
         if (menu) menuTrigger.current?.focus();
-        if (profile) profileTrigger.current?.focus();
-        if (notifications) notificationTrigger.current?.focus();
-        setMenu(false);
-        setProfile(false);
-        setNotifications(false);
+        else if (profile) profileTrigger.current?.focus();
+        else notificationTrigger.current?.focus();
+        setDisclosure(null);
       }
     };
 
@@ -100,7 +94,11 @@ export function Header({ user }: HeaderProps) {
       document.removeEventListener("pointerdown", click);
       document.removeEventListener("keydown", key);
     };
-  }, [menu, profile, notifications]);
+  }, [disclosure, menu, profile]);
+
+  function toggleDisclosure(target: HeaderDisclosure) {
+    setDisclosure(current => current === target ? null : target);
+  }
 
   async function logout() {
     try {
@@ -123,7 +121,7 @@ export function Header({ user }: HeaderProps) {
         aria-label="Profile menu"
         aria-expanded={profile}
         aria-controls="account-menu"
-        onClick={() => setProfile(!profile)}
+        onClick={() => toggleDisclosure("profile")}
       >
         {workspace && (
           <span>
@@ -218,7 +216,7 @@ export function Header({ user }: HeaderProps) {
               aria-label="Toggle navigation"
               aria-expanded={menu}
               aria-controls="mobile-menu"
-              onClick={() => setMenu(!menu)}
+              onClick={() => toggleDisclosure("navigation")}
             >
               <Menu size={17} />
             </button>
@@ -302,7 +300,7 @@ export function Header({ user }: HeaderProps) {
                   aria-label="Notifications"
                   aria-expanded={notifications}
                   aria-controls="notification-menu"
-                  onClick={() => setNotifications(!notifications)}
+                  onClick={() => toggleDisclosure("notifications")}
                 >
                   <Bell size={18} />
 
@@ -350,7 +348,7 @@ export function Header({ user }: HeaderProps) {
                 aria-label="Toggle navigation"
                 aria-expanded={menu}
                 aria-controls="mobile-menu"
-                onClick={() => setMenu(!menu)}
+                onClick={() => toggleDisclosure("navigation")}
               >
                 {menu ? <X /> : <Menu />}
               </button>
