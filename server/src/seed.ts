@@ -1,7 +1,7 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { User, Studio } from "./models.js";
+import { User, Studio } from "./models/index.js";
 export async function seed() {
   if (await Studio.countDocuments()) return;
   const hash = await bcrypt.hash("StudioPass1", 12);
