@@ -226,7 +226,27 @@ export function Listings() {
       <State
         loading={q.isPending}
         error={q.error}
-        empty={q.data?.length === 0}
+        empty={q.data?.length === 0 || filtered.length === 0}
+        emptyTitle={
+          studios.length > 0 ? "No listings match your filters." : undefined
+        }
+        emptyDescription={
+          studios.length > 0
+            ? "Adjust your search or clear the selected filters to view other listings."
+            : undefined
+        }
+        emptyActionLabel={studios.length > 0 ? "Clear filters" : undefined}
+        onEmptyAction={
+          studios.length > 0
+            ? () => {
+                setSearch("");
+                setCategory("");
+                setStatus("");
+                setSort("newest");
+                setPage(1);
+              }
+            : undefined
+        }
       />
       {view === "grid" ? (
         <div className="studio-grid">

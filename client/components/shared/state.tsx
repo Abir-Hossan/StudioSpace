@@ -6,10 +6,18 @@ export function State({
   loading,
   error,
   empty = false,
+  emptyTitle,
+  emptyDescription,
+  emptyActionLabel,
+  onEmptyAction,
 }: {
   loading?: boolean;
   error?: Error | null;
   empty?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  emptyActionLabel?: string;
+  onEmptyAction?: () => void;
 }) {
   if (loading) return <div className="skeleton" aria-label="Loading studios" />;
   if (error)
@@ -24,11 +32,20 @@ export function State({
     return (
       <div className="empty">
         <Aperture size={36} />
-        <h3>A little room for possibility.</h3>
-        <p>There’s nothing here yet. Explore a space to get started.</p>
-        <Link className="button primary" href="/studios">
-          Explore Studios
-        </Link>
+        <h3>{emptyTitle || "A little room for possibility."}</h3>
+        <p>
+          {emptyDescription ||
+            "There’s nothing here yet. Explore a space to get started."}
+        </p>
+        {onEmptyAction && emptyActionLabel ? (
+          <Button type="button" onClick={onEmptyAction}>
+            {emptyActionLabel}
+          </Button>
+        ) : (
+          <Link className="button primary" href="/studios">
+            Explore Studios
+          </Link>
+        )}
       </div>
     );
   return null;

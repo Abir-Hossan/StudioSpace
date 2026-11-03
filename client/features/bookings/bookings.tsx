@@ -162,7 +162,19 @@ export function Bookings({ host = false }: { host?: boolean }) {
       <State
         loading={q.isPending}
         error={q.error}
-        empty={!q.isPending && !q.error && visible.length === 0}
+        empty={!q.isPending && !q.error && all.length === 0}
+      />
+      <State
+        empty={!q.isPending && !q.error && all.length > 0 && visible.length === 0}
+        emptyTitle="No bookings match your filters."
+        emptyDescription="Adjust your search or clear the selected filters to view other bookings."
+        emptyActionLabel="Clear filters"
+        onEmptyAction={() => {
+          setTab("All");
+          setSearch("");
+          setMonth("");
+          setCategory("");
+        }}
       />
       <div className="booking-list reference-booking-list">
         {visible.map((b) => (
