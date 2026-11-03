@@ -3,7 +3,10 @@ import multer from "multer";
 import { ZodError } from "zod";
 export const handleNotFound = (_req: Request, res: Response) => res.status(404).json({ message: "Endpoint not found" });
 
-export const handleError = (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+export const handleError = (err: unknown, _req: Request, res: Response, next: NextFunction) => {
+  // Express must handle errors once a response, such as a PDF stream, has started.
+  if (res.headersSent) return next(err);
+
   if (err instanceof multer.MulterError) {
     const tooLarge = err.code === "LIMIT_FILE_SIZE";
     return res.status(tooLarge ? 413 : 400).json({
