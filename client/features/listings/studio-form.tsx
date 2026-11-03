@@ -48,7 +48,7 @@ export function StudioForm({ id }: { id?: string }) {
           .filter(
             (src: unknown) =>
               typeof src === "string" &&
-              /^\/images\/[a-zA-Z0-9_-]+\.png$/.test(src),
+              /^(?:\/images\/[a-zA-Z0-9_-]+|\/api\/uploads\/upload-[a-f0-9-]{36})\.png$/.test(src),
           )
           .slice(0, 12),
       );
@@ -435,7 +435,7 @@ export function StudioForm({ id }: { id?: string }) {
             : "Drop production photos or studio stills here"}
         </h3>
         <p>
-          PNG, JPG and WebP · Maximum 10 MB each
+          PNG, JPG and WebP
           <br />
           Saved locally as optimized PNG · Up to 12 images
         </p>

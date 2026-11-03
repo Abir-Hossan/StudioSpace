@@ -566,6 +566,44 @@ describe("authentication regression audit", () => {
 
 
 describe("request and upload security audit", () => {
+  it("connects on the hosted entry point and persists uploaded images in MongoDB", async () => {
+    vi.stubEnv("UPLOAD_STORAGE", "mongodb");
+    vi.stubEnv("MONGODB_URI", mongo.getUri());
+    try {
+      const { default: hosted } = await import("../app");
+      await mongoose.disconnect();
+      const health = await request(hosted).get("/api/health");
+      expect(health.status).toBe(200);
+      expect(health.body.database).toBe(true);
+
+      const agent = request.agent(hosted);
+      const credentials = { email: "hosted-upload@example.test", password: "StrongPass1" };
+      expect((await agent.post("/api/auth/register").set(h)
+        .send({ ...credentials, name: "Hosted Upload" })).status).toBe(201);
+      expect((await agent.post("/api/auth/login").set(h).send(credentials)).status).toBe(200);
+      expect((await request(hosted).post("/api/uploads").set(h)
+        .attach("image", Buffer.from("unauthorized"), "image.png")).status).toBe(401);
+      expect((await agent.post("/api/uploads").set(h)
+        .attach("image", Buffer.alloc(4 * 1024 * 1024 + 1), "large.png")).status).toBe(413);
+
+      const upload = await agent.post("/api/uploads").set(h)
+        .attach("image", path.resolve("client/public/images/studio-photo.png"));
+      expect(upload.status).toBe(201);
+      expect(upload.body.url).toMatch(/^\/api\/uploads\/upload-[a-f0-9-]{36}\.png$/);
+      const image = await request(hosted).get(upload.body.url);
+      expect(image.status).toBe(200);
+      expect(image.headers["content-type"]).toContain("image/png");
+      expect(image.body.subarray(1, 4).toString()).toBe("PNG");
+
+      const listing = await agent.post("/api/studios").set(h)
+        .send({ ...studio, images: [upload.body.url] });
+      expect(listing.status).toBe(201);
+      expect(listing.body.images).toEqual([upload.body.url]);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it("rejects cross-origin mutations outside test-mode bypass", async () => {
     const previous=process.env.NODE_ENV;
     try {
