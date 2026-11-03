@@ -140,6 +140,7 @@ Google cancellation and token-exchange errors return useful sign-in feedback. Pr
 - [Development and deployment guide](docs/DEVELOPMENT_GUIDE.md)
 - [Coding standards](docs/CODING_STANDARDS.md) and [contribution workflow](docs/GIT_WORKFLOW.md)
 - [Implementation report](docs/REFACTORING_LOG.md)
+- [Release audit and deployment gates](docs/RELEASE_AUDIT.md)
 
 | Environment variable | Purpose |
 | --- | --- |
