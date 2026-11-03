@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
@@ -46,6 +46,9 @@ export function Header({ user }: HeaderProps) {
   const [menu, setMenu] = useState(false);
   const [profile, setProfile] = useState(false);
   const [notifications, setNotifications] = useState(false);
+  const menuTrigger = useRef<HTMLButtonElement>(null);
+  const profileTrigger = useRef<HTMLButtonElement>(null);
+  const notificationTrigger = useRef<HTMLButtonElement>(null);
   const { theme, setTheme } = useTheme();
   const qc = useQueryClient();
   const router = useRouter();
@@ -81,6 +84,9 @@ export function Header({ user }: HeaderProps) {
 
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        if (menu) menuTrigger.current?.focus();
+        if (profile) profileTrigger.current?.focus();
+        if (notifications) notificationTrigger.current?.focus();
         setMenu(false);
         setProfile(false);
         setNotifications(false);
@@ -94,7 +100,7 @@ export function Header({ user }: HeaderProps) {
       document.removeEventListener("pointerdown", click);
       document.removeEventListener("keydown", key);
     };
-  }, []);
+  }, [menu, profile, notifications]);
 
   async function logout() {
     try {
@@ -111,9 +117,12 @@ export function Header({ user }: HeaderProps) {
   const avatar = user ? (
     <div className="profile account-menu">
       <button
+        ref={profileTrigger}
+        type="button"
         className="account-trigger"
         aria-label="Profile menu"
         aria-expanded={profile}
+        aria-controls="account-menu"
         onClick={() => setProfile(!profile)}
       >
         {workspace && (
@@ -138,7 +147,7 @@ export function Header({ user }: HeaderProps) {
       </button>
 
       {profile && (
-        <div className="dropdown">
+        <div className="dropdown" id="account-menu">
           <strong>{user.name}</strong>
           <small>{user.email}</small>
 
@@ -203,9 +212,12 @@ export function Header({ user }: HeaderProps) {
 
           {workspace && (
             <button
+              ref={menuTrigger}
+              type="button"
               className="icon sidebar-toggle"
               aria-label="Toggle navigation"
               aria-expanded={menu}
+              aria-controls="mobile-menu"
               onClick={() => setMenu(!menu)}
             >
               <Menu size={17} />
@@ -285,8 +297,11 @@ export function Header({ user }: HeaderProps) {
               <div className="profile notification-menu">
                 <button
                   className="icon"
+                  ref={notificationTrigger}
+                  type="button"
                   aria-label="Notifications"
                   aria-expanded={notifications}
+                  aria-controls="notification-menu"
                   onClick={() => setNotifications(!notifications)}
                 >
                   <Bell size={18} />
@@ -297,7 +312,7 @@ export function Header({ user }: HeaderProps) {
                 </button>
 
                 {notifications && (
-                  <div className="dropdown">
+                  <div className="dropdown" id="notification-menu">
                     <strong>Production notifications</strong>
                     <p>{alerts.data?.pending ?? 0} pending studio requests</p>
 
@@ -329,9 +344,12 @@ export function Header({ user }: HeaderProps) {
 
             {!workspace && (
               <button
+                ref={menuTrigger}
+                type="button"
                 className="icon mobile-toggle"
                 aria-label="Toggle navigation"
                 aria-expanded={menu}
+                aria-controls="mobile-menu"
                 onClick={() => setMenu(!menu)}
               >
                 {menu ? <X /> : <Menu />}
@@ -342,7 +360,11 @@ export function Header({ user }: HeaderProps) {
       </div>
 
       {menu && (
-        <nav className="mobile-menu">
+        <nav
+          className="mobile-menu"
+          id="mobile-menu"
+          aria-label="Mobile navigation"
+        >
           {[
             ["/", "Home"],
             ["/studios", "Explore Studios"],
