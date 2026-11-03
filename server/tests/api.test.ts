@@ -99,6 +99,28 @@ describe("StudioSpace API", () => {
         ).status,
       ).toBe(201);
   });
+  it("rejects whitespace-only studio location and overview fields", async () => {
+    const agent = request.agent(app);
+    await agent.post("/api/auth/register").set(h).send({
+      name: "Validation Host",
+      email: "validation-host@test.local",
+      password: "StrongPass1",
+    });
+    await agent.post("/api/auth/login").set(h).send({
+      email: "validation-host@test.local",
+      password: "StrongPass1",
+    });
+    for (const field of ["address", "city", "country", "overview"] as const) {
+      expect(
+        (
+          await agent
+            .post("/api/studios")
+            .set(h)
+            .send({ ...studio, [field]: "   " })
+        ).status,
+      ).toBe(400);
+    }
+  });
   it("rejects duplicate email and invalid credentials", async () => {
     expect(
       (
@@ -535,6 +557,7 @@ describe("request and upload security audit", () => {
     const r=await request(app).get("/api/studios").query({search:".*"}); expect(r.status).toBe(200); expect(r.body.total).toBe(0);
     expect((await request(app).get("/api/studios?page=-1")).status).toBe(400);
     expect((await request(app).get("/api/studios?minRating=999")).status).toBe(400);
+    expect((await request(app).get("/api/studios?availableDate=2026-02-31")).status).toBe(400);
   });
   it("rejects invalid image uploads as user input and converts valid images", async () => {
     const agent=request.agent(app); await agent.post("/api/auth/register").set(h).send({name:"Upload Test",email:"upload-limit@test.local",password:"StrongPass1"}); await agent.post("/api/auth/login").set(h).send({email:"upload-limit@test.local",password:"StrongPass1"});
