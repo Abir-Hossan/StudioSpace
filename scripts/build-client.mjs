@@ -1,17 +1,20 @@
-import fs from "node:fs";
 import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 const require = createRequire(import.meta.url);
-// Prepare the nested output directory before Next's static-export worker starts.
-// Windows restricted child processes cannot always create this nested folder.
-if (process.platform === "win32")
-  fs.mkdirSync(".next/server/app/_not-found.segments/_not-found", {
-    recursive: true,
-  });
+const env = { ...process.env };
+if (process.platform === "win32") {
+  const preload = fileURLToPath(new URL("./windows-segment-mkdir.cjs", import.meta.url))
+    .replaceAll("\\", "/");
+  env.STUDIOSPACE_BUILD_OUTPUT = path.resolve(env.NEXT_DIST_DIR || ".next");
+  env.NODE_OPTIONS = [env.NODE_OPTIONS, `--require="${preload}"`].filter(Boolean).join(" ");
+}
 const result = spawnSync(
   process.execPath,
   [require.resolve("next/dist/bin/next"), "build"],
-  { stdio: "inherit" },
+  { stdio: "inherit", env },
 );
 if (result.error) throw result.error;
 process.exit(result.status ?? 1);
