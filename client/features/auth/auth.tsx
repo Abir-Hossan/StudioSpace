@@ -78,13 +78,13 @@ export function Auth({ register: signup }: { register: boolean }) {
       );
       await qc.invalidateQueries({ queryKey: ["me"] });
       const next = new URLSearchParams(location.search).get("next");
-      router.push(
-        signup
-          ? "/login"
-          : next?.startsWith("/") && !next.startsWith("//")
-            ? next
-            : "/dashboard",
-      );
+      const destination = next?.startsWith("/") && URL.canParse(next, location.origin)
+        ? new URL(next, location.origin)
+        : null;
+      const returnPath = destination?.origin === location.origin && !destination.pathname.startsWith("//")
+        ? destination.pathname + destination.search + destination.hash
+        : "/dashboard";
+      router.push(signup ? "/login" : returnPath);
     } catch (e) {
       toast.error((e as Error).message);
     }
