@@ -537,8 +537,9 @@ describe("request and upload security audit", () => {
     expect((await request(app).get("/api/studios?minRating=999")).status).toBe(400);
   });
   it("rejects invalid image uploads as user input and converts valid images", async () => {
-    const agent=request.agent(app); await agent.post("/api/auth/login").set(h).send({email:"host@test.local",password:"StrongPass1"});
+    const agent=request.agent(app); await agent.post("/api/auth/register").set(h).send({name:"Upload Test",email:"upload-limit@test.local",password:"StrongPass1"}); await agent.post("/api/auth/login").set(h).send({email:"upload-limit@test.local",password:"StrongPass1"});
     const invalid=await agent.post("/api/uploads").set(h).attach("image",Buffer.from("not an image"),"invalid.png"); expect(invalid.status).toBe(400); expect(invalid.body.message).toContain("valid image");
+    const oversized=await agent.post("/api/uploads").set(h).attach("image",Buffer.alloc(10*1024*1024+1),"large.png"); expect(oversized.status).toBe(413); expect(oversized.body.message).toBe("Uploaded file exceeds the 10 MB limit"); expect(oversized.body.stack).toBeUndefined();
     const valid=await agent.post("/api/uploads").set(h).attach("image",path.resolve("client/public/images/studio-photo.png")); expect(valid.status).toBe(201); expect(valid.body.url).toMatch(/^\/images\/upload-.*\.png$/);
     const result=fs.readFileSync(path.resolve("client/public"+valid.body.url)); expect(result.subarray(1,4).toString()).toBe("PNG"); fs.unlinkSync(path.resolve("client/public"+valid.body.url));
   });
