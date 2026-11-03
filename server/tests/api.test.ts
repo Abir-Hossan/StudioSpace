@@ -265,8 +265,11 @@ describe("StudioSpace API", () => {
       ).status,
     ).toBe(409);
   });
-  it("produces an actual PDF booking summary", async () => {
+  it("limits booking summaries to involved parties and produces an actual PDF", async () => {
     const b = await Booking.findOne({ status: "Confirmed" });
+    const denied = await stranger.get("/api/bookings/" + b!._id + "/invoice");
+    expect(denied.status).toBe(403);
+    expect(denied.body.message).toBe("Access denied");
     const r = await owner.get("/api/bookings/" + b!._id + "/invoice");
     expect(r.status).toBe(200);
     expect(r.headers["content-type"]).toContain("application/pdf");
