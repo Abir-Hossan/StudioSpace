@@ -61,6 +61,28 @@ afterAll(async () => {
   await mongo?.stop();
 });
 describe("StudioSpace API", () => {
+  it("rejects a still-active session after its account is deleted", async () => {
+    const user = await User.create({ name: "Removed Host", email: "removed-host@example.test" });
+    const userId = String(user._id);
+    const session = jwt.sign({ sub: userId }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+    const { createHash } = await import("node:crypto");
+    const stored = await AuthSession.create({
+      userId,
+      tokenHash: createHash("sha256").update(session).digest("hex"),
+      expiresAt: new Date(Date.now() + 3600000),
+    });
+    const wishlist = () => request(app).get("/api/wishlist").set("Cookie", `session=${session}`);
+
+    try {
+      expect((await wishlist()).status).toBe(200);
+      await User.deleteOne({ _id: userId });
+      expect(await AuthSession.exists({ _id: stored._id })).not.toBeNull();
+      expect((await wishlist()).status).toBe(401);
+    } finally {
+      await AuthSession.deleteOne({ _id: stored._id });
+      await User.deleteOne({ _id: userId });
+    }
+  });
   it("rejects new passwords that bcrypt would silently truncate", async () => {
     const email = "long-password@test.local";
     const response = await request(app).post("/api/auth/register").set(h).send({

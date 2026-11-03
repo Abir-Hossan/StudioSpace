@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import { secret } from "../config/environment.js";
 import { fail } from "../utils/http-error.js";
-import { AuthSession } from "../models/index.js";
+import { AuthSession, User } from "../models/index.js";
 import { tokenHash } from "../services/session.js";
 import rateLimit from "express-rate-limit";
 export const auth: RequestHandler = async (req, _res, next) => {
@@ -23,7 +23,8 @@ export const auth: RequestHandler = async (req, _res, next) => {
     userId: token.sub,
     expiresAt: { $gt: new Date() },
   });
-  if (!active) fail(401, "Sign in to continue");
+  if (!active || !(await User.exists({ _id: token.sub })))
+    fail(401, "Sign in to continue");
   req.userId = token.sub;
   next();
 };
