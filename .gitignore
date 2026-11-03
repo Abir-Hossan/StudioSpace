@@ -20,3 +20,6 @@ playwright-report/
 
 .DS_Store
 Thumbs.db
+
+# Runtime-uploaded images
+client/public/images/upload-*.png
