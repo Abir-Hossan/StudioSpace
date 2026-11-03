@@ -110,7 +110,7 @@ For the compiled API, run `node server/dist/index.js` from the repository root a
 - [Google OAuth server flow](https://developers.google.com/identity/protocols/oauth2/web-server)
 - [Radix accessible dialog](https://www.radix-ui.com/primitives/docs/components/dialog)
 
-This source is a local development deliverable. Production hardening, legal policies, operational support, account recovery and deployment are outside this project’s scope. No Git commits, remote pushes or deployment are performed.
+This source is a local development deliverable. Production hardening, legal policies, operational support, account recovery and deployment are outside this project’s scope. The contribution workflow uses a dedicated feature branch. Deployment requires the target environment checks in the development guide.
 
 
 ### Persistent MongoDB restart fix
@@ -130,3 +130,24 @@ See FULL-QA-REPORT.md for the latest evidence and production blockers. The foote
 
 Google cancellation and token-exchange errors return useful sign-in feedback. Provider-mocked tests exercise account creation/reuse and reject unverified identities, but live Google consent and the resulting callback still require an account-holder sign-in. Local credentials were detected and the real Google handoff was verified during this audit. Targeted Zod, Sharp and Vitest upgrades remove the high/critical findings; consult the report for the remaining development-tool advisories.
 
+
+
+## Project documentation
+
+- [Architecture](docs/ARCHITECTURE.md) and [folder structure](docs/FOLDER_STRUCTURE.md)
+- [Component dependency map](docs/COMPONENT_DEPENDENCY_MAP.md)
+- [API reference](docs/API_DOCUMENTATION.md)
+- [Development and deployment guide](docs/DEVELOPMENT_GUIDE.md)
+- [Coding standards](docs/CODING_STANDARDS.md) and [contribution workflow](docs/GIT_WORKFLOW.md)
+- [Implementation report](docs/REFACTORING_LOG.md)
+- [Release audit and deployment gates](docs/RELEASE_AUDIT.md)
+
+| Environment variable | Purpose |
+| --- | --- |
+| MONGODB_URI | Replica set connection for the separate API process |
+| JWT_SECRET | Private signing secret of at least 32 characters |
+| CLIENT_URL | Allowed frontend origin and OAuth return origin |
+| SERVER_URL | Express target baked into Next's API rewrite at build time |
+| GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL | Google OAuth web-client configuration |
+| PORT, API_PORT, LOCAL_MONGO_PORT, LOCAL_MONGO_DB_PATH | Local runner ports and persistent database directory |
+| NEXT_DIST_DIR, STUDIOSPACE_TEST_URL | Isolated Next output and browser test URL |

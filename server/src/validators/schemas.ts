@@ -13,7 +13,10 @@ export const registerSchema = z.object({
     .string()
     .email()
     .transform((s) => s.toLowerCase()),
-  password: z.string().min(6).max(128).regex(/[A-Z]/).regex(/[a-z]/),
+  password: z.string().min(6).max(128).regex(/[A-Z]/).regex(/[a-z]/)
+    .refine(password => Buffer.byteLength(password, "utf8") <= 72, {
+      message: "Password must be at most 72 UTF-8 bytes",
+    }),
   photoURL: z.union([z.string().url(), z.literal("")]).optional(),
 });
 export const studioSchema = z.object({
@@ -34,15 +37,15 @@ export const studioSchema = z.object({
   hourlyRate: z.number().finite().positive().max(100000),
   securityDeposit: z.number().finite().min(0).max(100000),
   maxCapacity: z.number().int().positive().max(10000),
-  address: z.string().min(3).max(300),
-  city: z.string().min(2).max(100),
-  country: z.string().min(2).max(100),
+  address: z.string().trim().min(3).max(300),
+  city: z.string().trim().min(2).max(100),
+  country: z.string().trim().min(2).max(100),
   images: z
     .array(z.string().regex(/^\/images\/[a-zA-Z0-9_-]+\.png$/))
     .min(1)
     .max(12),
   amenities: z.array(z.string().max(60)).max(30),
-  overview: z.string().min(20).max(10000),
+  overview: z.string().trim().min(20).max(10000),
 });
 export function bookingTimes(start: string, end: string) {
   const a = new Date(start),

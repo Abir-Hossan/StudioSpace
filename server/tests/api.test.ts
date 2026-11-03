@@ -5,8 +5,8 @@ import { MongoMemoryReplSet } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../src/app";
-import { User, Studio, Booking, AuthSession } from "../src/models";
-import { bookingTimes } from "../src/validation";
+import { User, Studio, Booking, AuthSession } from "../src/models/index";
+import { bookingTimes } from "../src/validators/schemas";
 import fs from "node:fs";
 import path from "node:path";
 let mongo: MongoMemoryReplSet;
@@ -61,6 +61,39 @@ afterAll(async () => {
   await mongo?.stop();
 });
 describe("StudioSpace API", () => {
+  it("rejects a still-active session after its account is deleted", async () => {
+    const user = await User.create({ name: "Removed Host", email: "removed-host@example.test" });
+    const userId = String(user._id);
+    const session = jwt.sign({ sub: userId }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+    const { createHash } = await import("node:crypto");
+    const stored = await AuthSession.create({
+      userId,
+      tokenHash: createHash("sha256").update(session).digest("hex"),
+      expiresAt: new Date(Date.now() + 3600000),
+    });
+    const wishlist = () => request(app).get("/api/wishlist").set("Cookie", `session=${session}`);
+
+    try {
+      expect((await wishlist()).status).toBe(200);
+      await User.deleteOne({ _id: userId });
+      expect(await AuthSession.exists({ _id: stored._id })).not.toBeNull();
+      expect((await wishlist()).status).toBe(401);
+    } finally {
+      await AuthSession.deleteOne({ _id: stored._id });
+      await User.deleteOne({ _id: userId });
+    }
+  });
+  it("rejects new passwords that bcrypt would silently truncate", async () => {
+    const email = "long-password@test.local";
+    const response = await request(app).post("/api/auth/register").set(h).send({
+      name: "Long Password",
+      email,
+      password: "Aa" + "é".repeat(36),
+    });
+    expect(response.status).toBe(400);
+    expect(response.body.message).toContain("72 UTF-8 bytes");
+    expect(await User.exists({ email })).toBeNull();
+  });
   it("rejects unauthorized access and missing CSRF header", async () => {
     expect((await request(app).get("/api/studios/mine")).status).toBe(401);
     expect((await request(app).post("/api/auth/logout")).status).toBe(403);
@@ -87,6 +120,28 @@ describe("StudioSpace API", () => {
             .send({ name, email, password: "StrongPass1" })
         ).status,
       ).toBe(201);
+  });
+  it("rejects whitespace-only studio location and overview fields", async () => {
+    const agent = request.agent(app);
+    await agent.post("/api/auth/register").set(h).send({
+      name: "Validation Host",
+      email: "validation-host@test.local",
+      password: "StrongPass1",
+    });
+    await agent.post("/api/auth/login").set(h).send({
+      email: "validation-host@test.local",
+      password: "StrongPass1",
+    });
+    for (const field of ["address", "city", "country", "overview"] as const) {
+      expect(
+        (
+          await agent
+            .post("/api/studios")
+            .set(h)
+            .send({ ...studio, [field]: "   " })
+        ).status,
+      ).toBe(400);
+    }
   });
   it("rejects duplicate email and invalid credentials", async () => {
     expect(
@@ -232,8 +287,11 @@ describe("StudioSpace API", () => {
       ).status,
     ).toBe(409);
   });
-  it("produces an actual PDF booking summary", async () => {
+  it("limits booking summaries to involved parties and produces an actual PDF", async () => {
     const b = await Booking.findOne({ status: "Confirmed" });
+    const denied = await stranger.get("/api/bookings/" + b!._id + "/invoice");
+    expect(denied.status).toBe(403);
+    expect(denied.body.message).toBe("Access denied");
     const r = await owner.get("/api/bookings/" + b!._id + "/invoice");
     expect(r.status).toBe(200);
     expect(r.headers["content-type"]).toContain("application/pdf");
@@ -524,10 +582,12 @@ describe("request and upload security audit", () => {
     const r=await request(app).get("/api/studios").query({search:".*"}); expect(r.status).toBe(200); expect(r.body.total).toBe(0);
     expect((await request(app).get("/api/studios?page=-1")).status).toBe(400);
     expect((await request(app).get("/api/studios?minRating=999")).status).toBe(400);
+    expect((await request(app).get("/api/studios?availableDate=2026-02-31")).status).toBe(400);
   });
   it("rejects invalid image uploads as user input and converts valid images", async () => {
-    const agent=request.agent(app); await agent.post("/api/auth/login").set(h).send({email:"host@test.local",password:"StrongPass1"});
+    const agent=request.agent(app); await agent.post("/api/auth/register").set(h).send({name:"Upload Test",email:"upload-limit@test.local",password:"StrongPass1"}); await agent.post("/api/auth/login").set(h).send({email:"upload-limit@test.local",password:"StrongPass1"});
     const invalid=await agent.post("/api/uploads").set(h).attach("image",Buffer.from("not an image"),"invalid.png"); expect(invalid.status).toBe(400); expect(invalid.body.message).toContain("valid image");
+    const oversized=await agent.post("/api/uploads").set(h).attach("image",Buffer.alloc(10*1024*1024+1),"large.png"); expect(oversized.status).toBe(413); expect(oversized.body.message).toBe("Uploaded file exceeds the 10 MB limit"); expect(oversized.body.stack).toBeUndefined();
     const valid=await agent.post("/api/uploads").set(h).attach("image",path.resolve("client/public/images/studio-photo.png")); expect(valid.status).toBe(201); expect(valid.body.url).toMatch(/^\/images\/upload-.*\.png$/);
     const result=fs.readFileSync(path.resolve("client/public"+valid.body.url)); expect(result.subarray(1,4).toString()).toBe("PNG"); fs.unlinkSync(path.resolve("client/public"+valid.body.url));
   });

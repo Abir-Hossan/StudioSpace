@@ -21,9 +21,21 @@ export async function api<T>(
     },
     ...(body ? { body: multipart ? body : JSON.stringify(body) } : {}),
   });
-  const data = await res.json();
-  if (!res.ok) throw new ApiError(data.message || "Request failed", res.status);
-  return data;
+  let data: unknown;
+  try {
+    data = await res.json();
+  } catch {
+    throw new ApiError(
+      res.ok ? "The server returned an unexpected response" : "Request failed. Please try again.",
+      res.status,
+    );
+  }
+  if (!res.ok) {
+    const message = data && typeof data === "object" && "message" in data &&
+      typeof data.message === "string" ? data.message : "Request failed";
+    throw new ApiError(message, res.status);
+  }
+  return data as T;
 }
 export type User = {
   professionalTitle?: string;
