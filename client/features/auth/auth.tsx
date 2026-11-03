@@ -11,24 +11,33 @@ import { ArrowRight, CalendarDays, Camera, Check, Eye, EyeOff, Film, LockKeyhole
 import { Brand } from "../../components/layout/header";
 import Link from "next/link";
 import { Button, Modal } from "../../components/ui";
-const authSchema = z.object({
+const authFields = {
   remember: z.boolean().optional(),
   accepted: z.boolean().optional(),
   accountIntent: z.enum(["creator", "host"]).optional(),
   name: z.string().optional(),
   email: z.string().email("Enter a valid email"),
+  photoURL: z
+    .union([z.string().url("Enter a valid photo URL"), z.literal("")])
+    .optional(),
+  confirm: z.string().optional(),
+};
+
+const signInSchema = z.object({
+  ...authFields,
+  password: z.string().max(128),
+});
+
+const registrationSchema = z.object({
+  ...authFields,
   password: z
     .string()
     .min(6, "Use at least six characters")
     .regex(/[A-Z]/, "Include an uppercase letter")
     .regex(/[a-z]/, "Include a lowercase letter"),
-  photoURL: z
-    .union([z.string().url("Enter a valid photo URL"), z.literal("")])
-    .optional(),
-  confirm: z.string().optional(),
 });
 
-type AuthValues = z.infer<typeof authSchema>;
+type AuthValues = z.infer<typeof registrationSchema>;
 
 export function Auth({ register: signup }: { register: boolean }) {
   const {
@@ -39,7 +48,7 @@ export function Auth({ register: signup }: { register: boolean }) {
     watch,
     setValue,
   } = useForm<AuthValues>({
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(signup ? registrationSchema : signInSchema),
     defaultValues: { remember: true, accountIntent: "creator" },
   });
   const [showPassword, setShowPassword] = useState(false);
