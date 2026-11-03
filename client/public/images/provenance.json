@@ -1,0 +1,101 @@
+[
+  {
+    "filename": "studio-music.png",
+    "sourceHash": "1bed63033568733341100b32d92a09f021017fbc",
+    "width": 512,
+    "height": 279,
+    "note": "Replaced browser-chrome-contaminated asset with clean hero-music source"
+  },
+  {
+    "filename": "hero-soundstage.png",
+    "sourceHash": "71ef161fe7f3ba650fdb53b12ba38d54dd960226",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "hero-production.png",
+    "sourceHash": "089fb97618969884aefb5f58565298257d7f2139",
+    "width": 512,
+    "height": 286
+  },
+  {
+    "filename": "studio-green-screen.png",
+    "sourceHash": "efcef0e95d5216a1b721c78b91439bfa8f178e7d",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "studio-art.png",
+    "sourceHash": "8f3d9ae19c9d6d9b3dd6359b8b2ed2871abc9591",
+    "width": 512,
+    "height": 286
+  },
+  {
+    "filename": "studio-podcast.png",
+    "sourceHash": "e28645324d36a19062665205f9cdf645dae7ffc3",
+    "width": 422,
+    "height": 252,
+    "crop": "Removed embedded sidebar and top chrome: source rect x90 y20 w422 h252"
+  },
+  {
+    "filename": "studio-film.png",
+    "sourceHash": "c53ed09b08506c8a3359e1d636c3852033a1da2c",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "studio-workshop.png",
+    "sourceHash": "c48560c7a8217aee9dccca9c98b6c0181d7f3d86",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "studio-gallery-2.png",
+    "sourceHash": "b09586b5b664c6177c06220749fb92d09bcec21d",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "hero-music.png",
+    "sourceHash": "1bed63033568733341100b32d92a09f021017fbc",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "studio-cyclorama.png",
+    "sourceHash": "5d089fc0705f21db83bf86b74f61e0cc916be564",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "studio-photo.png",
+    "sourceHash": "7cd8cac15f70b99ebd098068d2733340bbf9571a",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "studio-gallery-1.png",
+    "sourceHash": "281cd818e7226dd680de5cec4e2bf06b00396a93",
+    "width": 512,
+    "height": 279
+  },
+  {
+    "filename": "host-portrait.png",
+    "sourceHash": "69cd9e4219479af38b16a5d190866d7b585d1424",
+    "width": 512,
+    "height": 512
+  },
+  {
+    "filename": "studio-lounge.png",
+    "sourceHash": "5e7ee752cff333268c5e3834b4f1ffe31ba26035",
+    "width": 512,
+    "height": 286
+  },
+  {
+    "filename": "studio-daylight.png",
+    "sourceHash": "aab215be8834e3c5a7cd7989d56ea7dddd5dd7a1",
+    "width": 512,
+    "height": 279,
+    "note": "Replaced browser-chrome-contaminated asset with clean daylight studio source"
+  }
+]

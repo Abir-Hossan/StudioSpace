@@ -1,0 +1,1092 @@
+[
+  {
+    "page": "/",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/how-it-works",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/about",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios?category=Photo%20Studios",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios?category=Film%20Stages",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios?category=Podcast%20Rooms",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios?category=Music%20Suites",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios?category=Art%20Workshops",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios/6ae8adf9b2415044a4f4e834",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios/6ae8adf9b2415044a4f4e835",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios/6ae8adf9b2415044a4f4e836",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios/6ae8adf9b2415044a4f4e837",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios/6ae8adf9b2415044a4f4e838",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/studios/6ae8adf9b2415044a4f4e839",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/how-it-works",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/about",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e834",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e835",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e836",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e837",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e838",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e839",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e83a",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e83b",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios/6ae8adf9b2415044a4f4e83c",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/api/studios/catalog.pdf",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios?category=Photo%20Studios",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios?category=Film%20Stages",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios?category=Podcast%20Rooms",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios?category=Music%20Suites",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/studios?category=Art%20Workshops",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/wishlist",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/studios",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/how-it-works",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/about",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios?location=Dhaka",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios?location=Brooklyn",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios?location=Los%20Angeles",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios?category=Photo%20Studios",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios?category=Film%20Stages",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios?category=Podcast%20Rooms",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios?category=Music%20Suites",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/studios?category=Art%20Workshops",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/about",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/how-it-works",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/about",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/studios?category=Photo%20Studios",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/studios?category=Film%20Stages",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/studios?category=Podcast%20Rooms",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/studios?category=Music%20Suites",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/studios?category=Art%20Workshops",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/how-it-works",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/how-it-works",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/about",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/studios?category=Photo%20Studios",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/studios?category=Film%20Stages",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/studios?category=Podcast%20Rooms",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/studios?category=Music%20Suites",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/studios?category=Art%20Workshops",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/terms",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/how-it-works",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/about",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/studios?category=Photo%20Studios",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/studios?category=Film%20Stages",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/studios?category=Podcast%20Rooms",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/studios?category=Music%20Suites",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/studios?category=Art%20Workshops",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/privacy",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/login",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/login",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/login",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/login",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/login",
+    "href": "/api/auth/google",
+    "status": "200"
+  },
+  {
+    "page": "/login",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/login",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/register",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/register",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/register",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/register",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/register",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/register",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/register",
+    "href": "/api/auth/google",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/login",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/how-it-works",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/about",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/register",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/studios?category=Film%20Stages",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/studios?category=Photo%20Studios",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/studios?category=Podcast%20Rooms",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/studios?category=Music%20Suites",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/studios?category=Art%20Workshops",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/studios/6ae8adf9b2415044a4f4e834",
+    "href": "/privacy",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/dashboard",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/my-listings",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/host-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/wishlist",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/dashboard",
+    "href": "/api/bookings/summary.pdf",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/dashboard",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/my-listings",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/host-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/wishlist",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/6ae8adf9b2415044a4f4e834",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/6ae8adf9b2415044a4f4e835",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/edit/6ae8adf9b2415044a4f4e835",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/6ae8adf9b2415044a4f4e836",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/edit/6ae8adf9b2415044a4f4e836",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/6ae8adf9b2415044a4f4e837",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/edit/6ae8adf9b2415044a4f4e837",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/6ae8adf9b2415044a4f4e838",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/edit/6ae8adf9b2415044a4f4e838",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/6ae8adf9b2415044a4f4e839",
+    "status": "200"
+  },
+  {
+    "page": "/my-listings",
+    "href": "/studios/edit/6ae8adf9b2415044a4f4e839",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/dashboard",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/my-listings",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/host-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/wishlist",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/api/bookings/summary.pdf",
+    "status": "200"
+  },
+  {
+    "page": "/my-bookings",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/dashboard",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/my-listings",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/host-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/wishlist",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/api/bookings/summary.pdf",
+    "status": "200"
+  },
+  {
+    "page": "/host-bookings",
+    "href": "/studios/6ae8adf9b2415044a4f4e834",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/dashboard",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/my-listings",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/host-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/wishlist",
+    "status": "200"
+  },
+  {
+    "page": "/wishlist",
+    "href": "/studios",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/dashboard",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/my-listings",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/host-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/wishlist",
+    "status": "200"
+  },
+  {
+    "page": "/profile-settings",
+    "href": "/terms",
+    "status": "200"
+  },
+  {
+    "page": "/add-studio",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/add-studio",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/add-studio",
+    "href": "/dashboard",
+    "status": "200"
+  },
+  {
+    "page": "/add-studio",
+    "href": "/my-listings",
+    "status": "200"
+  },
+  {
+    "page": "/add-studio",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/add-studio",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/add-studio",
+    "href": "/host-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/add-studio",
+    "href": "/wishlist",
+    "status": "200"
+  },
+  {
+    "page": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "href": "/",
+    "status": "200"
+  },
+  {
+    "page": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "href": "/add-studio",
+    "status": "200"
+  },
+  {
+    "page": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "href": "/dashboard",
+    "status": "200"
+  },
+  {
+    "page": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "href": "/my-listings",
+    "status": "200"
+  },
+  {
+    "page": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "href": "/my-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "href": "/profile-settings",
+    "status": "200"
+  },
+  {
+    "page": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "href": "/host-bookings",
+    "status": "200"
+  },
+  {
+    "page": "/studios/edit/6ae8adf9b2415044a4f4e834",
+    "href": "/wishlist",
+    "status": "200"
+  }
+]

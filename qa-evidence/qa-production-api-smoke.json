@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "mode": "compiled Express API with NODE_ENV=production, isolated database",
+  "checks": [
+    "database health",
+    "password login",
+    "Secure/HttpOnly/SameSite cookie flags",
+    "authenticated session retrieval",
+    "copied token rejected after logout",
+    "cross-origin mutation rejected"
+  ],
+  "browserHttpsNotTested": true
+}

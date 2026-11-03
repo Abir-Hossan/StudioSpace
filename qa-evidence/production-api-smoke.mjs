@@ -1,0 +1,10 @@
+import fs from 'node:fs/promises';
+const base='http://127.0.0.1:4003';const headers={'content-type':'application/json','x-studiospace':'1',origin:'http://localhost:3003'};
+const health=await fetch(base+'/api/health');if(!health.ok||!(await health.json()).database)throw Error('Health failed');
+const login=await fetch(base+'/api/auth/login',{method:'POST',headers,body:JSON.stringify({email:'host@studiospace.local',password:'StudioPass1'})});const raw=login.headers.get('set-cookie')||'';
+if(!login.ok||!raw.includes('Secure')||!raw.includes('HttpOnly')||!raw.includes('SameSite=Lax'))throw Error('Login/cookie flags failed: '+login.status);
+const cookie=raw.split(';')[0];if((await fetch(base+'/api/auth/me',{headers:{cookie}})).status!==200)throw Error('Session failed');
+await fetch(base+'/api/auth/logout',{method:'POST',headers:{...headers,cookie}});if((await fetch(base+'/api/auth/me',{headers:{cookie}})).status!==401)throw Error('Revocation failed');
+const origin=await fetch(base+'/api/auth/logout',{method:'POST',headers:{...headers,origin:'https://untrusted.invalid'}});if(origin.status!==403)throw Error('Origin validation failed');
+const result={status:'PASS',mode:'compiled Express API with NODE_ENV=production, isolated database',checks:['database health','password login','Secure/HttpOnly/SameSite cookie flags','authenticated session retrieval','copied token rejected after logout','cross-origin mutation rejected'],browserHttpsNotTested:true};
+await fs.writeFile('work/qa-production-api-smoke.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
