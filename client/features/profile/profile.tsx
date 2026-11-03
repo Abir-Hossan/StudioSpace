@@ -7,6 +7,25 @@ import Link from "next/link";
 import { ArrowRight, CalendarDays, Check, Clock, Film, LockKeyhole, ShieldCheck, Users } from "lucide-react";
 import { ModuleTitle } from "../../components/shared/workspace";
 import { Button } from "../../components/ui";
+import { z } from "zod";
+
+const profileSchema = z.object({
+  name: z.string().trim().min(2, "Enter at least 2 characters").max(100),
+  photoURL: z.union([z.string().url("Enter a valid photo URL"), z.literal("")]),
+  professionalTitle: z.string().max(100),
+  bio: z.string().max(1200),
+  phone: z.string().max(40),
+  website: z.union([z.string().url("Enter a valid website URL"), z.literal("")]),
+  portfolio: z.union([
+    z.string().url("Enter a valid portfolio URL"),
+    z.literal(""),
+  ]),
+  bookingPreference: z.string().max(100),
+  crewPreference: z.string().max(100),
+});
+
+type ProfileField = keyof z.infer<typeof profileSchema>;
+
 export function Profile() {
   const { data: user } = useUser();
   const qc = useQueryClient();
@@ -20,14 +39,40 @@ export function Profile() {
   const [busy, setBusy] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [version, setVersion] = useState(0);
+  const [errors, setErrors] = useState<Partial<Record<ProfileField, string>>>(
+    {},
+  );
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const result = profileSchema.safeParse(
+      Object.fromEntries(new FormData(e.currentTarget)),
+    );
+    if (!result.success) {
+      const nextErrors: Partial<Record<ProfileField, string>> = {};
+      for (const issue of result.error.issues) {
+        const field = issue.path[0];
+        if (
+          typeof field === "string" &&
+          field in profileSchema.shape &&
+          !nextErrors[field as ProfileField]
+        )
+          nextErrors[field as ProfileField] = issue.message;
+      }
+      setErrors(nextErrors);
+      e.currentTarget
+        .querySelector<HTMLElement>(
+          `[name="${Object.keys(nextErrors)[0]}"]`,
+        )
+        ?.focus();
+      return;
+    }
+    setErrors({});
     setBusy(true);
     try {
       await api(
         "/users/me",
         "PATCH",
-        Object.fromEntries(new FormData(e.currentTarget)),
+        result.data,
       );
       await qc.invalidateQueries({ queryKey: ["me"] });
       setDirty(false);
@@ -37,6 +82,13 @@ export function Profile() {
     } finally {
       setBusy(false);
     }
+  }
+  function fieldError(field: ProfileField) {
+    return errors[field] ? (
+      <small id={`${field}-error`} className="error" role="alert">
+        {errors[field]}
+      </small>
+    ) : null;
   }
   return (
     <>
@@ -138,7 +190,12 @@ export function Profile() {
         noValidate
         key={user?._id + "-" + version}
         onSubmit={submit}
-        onChange={() => setDirty(true)}
+        onChange={(e) => {
+          setDirty(true);
+          const field = e.target.name as ProfileField;
+          if (field in profileSchema.shape && errors[field])
+            setErrors((current) => ({ ...current, [field]: undefined }));
+        }}
       >
         <section
           className="form-module panel"
@@ -161,7 +218,10 @@ export function Profile() {
                 minLength={2}
                 maxLength={100}
                 defaultValue={user?.name}
+                aria-invalid={!!errors.name}
+                aria-describedby={errors.name ? "name-error" : undefined}
               />
+              {fieldError("name")}
             </label>
             <label>
               Industry display title
@@ -170,7 +230,12 @@ export function Profile() {
                 defaultValue={user?.professionalTitle}
                 maxLength={100}
                 placeholder="Producer / photographer / studio host"
+                aria-invalid={!!errors.professionalTitle}
+                aria-describedby={
+                  errors.professionalTitle ? "professionalTitle-error" : undefined
+                }
               />
+              {fieldError("professionalTitle")}
             </label>
             <label>
               Profile photo URL
@@ -178,7 +243,10 @@ export function Profile() {
                 name="photoURL"
                 type="url"
                 defaultValue={user?.photoURL || ""}
+                aria-invalid={!!errors.photoURL}
+                aria-describedby={errors.photoURL ? "photoURL-error" : undefined}
               />
+              {fieldError("photoURL")}
             </label>
             <label>
               Production inquiries email
@@ -191,7 +259,10 @@ export function Profile() {
                 defaultValue={user?.phone}
                 maxLength={40}
                 placeholder="Phone (optional)"
+                aria-invalid={!!errors.phone}
+                aria-describedby={errors.phone ? "phone-error" : undefined}
               />
+              {fieldError("phone")}
             </label>
             <label>
               Studio / production house URL
@@ -200,7 +271,10 @@ export function Profile() {
                 type="url"
                 defaultValue={user?.website}
                 placeholder="https://your-studio.com"
+                aria-invalid={!!errors.website}
+                aria-describedby={errors.website ? "website-error" : undefined}
               />
+              {fieldError("website")}
             </label>
           </div>
           <label>
@@ -210,7 +284,10 @@ export function Profile() {
               type="url"
               defaultValue={user?.portfolio}
               placeholder="https://your-portfolio.com"
+              aria-invalid={!!errors.portfolio}
+              aria-describedby={errors.portfolio ? "portfolio-error" : undefined}
             />
+            {fieldError("portfolio")}
           </label>
           <label>
             Director & host statement
@@ -220,7 +297,10 @@ export function Profile() {
               rows={5}
               defaultValue={user?.bio}
               placeholder="Tell creators about your work, production approach, and studio experience."
+              aria-invalid={!!errors.bio}
+              aria-describedby={errors.bio ? "bio-error" : undefined}
             />
+            {fieldError("bio")}
           </label>
           <small className="muted">
             Your email address cannot be changed in this edition.
@@ -301,6 +381,7 @@ export function Profile() {
                   <option key={v}>{v}</option>
                 ))}
               </select>
+              {fieldError("bookingPreference")}
               <small>
                 Planning preference; each booking requires selected hours.
               </small>
@@ -320,6 +401,7 @@ export function Profile() {
                   <option key={v}>{v}</option>
                 ))}
               </select>
+              {fieldError("crewPreference")}
             </label>
             <div>
               <span className="field-label">PAYMENT SERVICES</span>
