@@ -1,22 +1,31 @@
-import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import type { RequestHandler } from "express";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 import { secret } from "../config/environment.js";
 import { fail } from "../utils/http-error.js";
 import { AuthSession } from "../models/index.js";
 import { tokenHash } from "../services/session.js";
 import rateLimit from "express-rate-limit";
-export const auth = async (req: Request, _res: Response, next: NextFunction) => {
+export const auth: RequestHandler = async (req, _res, next) => {
+  const signed = req.cookies.session;
+  if (typeof signed !== "string") fail(401, "Sign in to continue");
+
+  const signingKey = secret();
+  let token: string | JwtPayload;
   try {
-    const token = jwt.verify(req.cookies.session || "", secret());
-    if (typeof token === "string" || !token.sub)
-      fail(401, "Sign in to continue");
-    if (!await AuthSession.exists({ tokenHash: tokenHash(req.cookies.session), userId: token.sub, expiresAt: { $gt: new Date() } }))
-      fail(401, "Sign in to continue");
-    req.userId = String(token.sub);
-    next();
+    token = jwt.verify(signed, signingKey);
   } catch {
-    next(Object.assign(new Error("Sign in to continue"), { status: 401 }));
+    fail(401, "Sign in to continue");
   }
+  if (typeof token === "string" || !token.sub) fail(401, "Sign in to continue");
+
+  const active = await AuthSession.exists({
+    tokenHash: tokenHash(signed),
+    userId: token.sub,
+    expiresAt: { $gt: new Date() },
+  });
+  if (!active) fail(401, "Sign in to continue");
+  req.userId = token.sub;
+  next();
 };
 
 export const authLimit = rateLimit({ windowMs: 900000, limit: 30 });

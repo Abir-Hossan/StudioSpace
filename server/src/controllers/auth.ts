@@ -97,9 +97,9 @@ export const finishGoogle: RequestHandler = async (req, res) => {
   catch { return res.redirect(client() + "/login?error=" + encodeURIComponent("Google sign-in could not be completed. Please try again.")); }
   if (!tokens.id_token) fail(401, "Google identity could not be verified");
   const ticket = await o.verifyIdToken({
-    idToken: tokens.id_token!,
+    idToken: tokens.id_token,
     audience: process.env.GOOGLE_CLIENT_ID,
-  });
+  }).catch(() => fail(401, "Google identity could not be verified"));
   const p = ticket.getPayload();
   if (!p?.email_verified || !p.email)
     fail(401, "Google identity could not be verified");
