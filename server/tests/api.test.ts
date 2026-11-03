@@ -61,6 +61,17 @@ afterAll(async () => {
   await mongo?.stop();
 });
 describe("StudioSpace API", () => {
+  it("rejects new passwords that bcrypt would silently truncate", async () => {
+    const email = "long-password@test.local";
+    const response = await request(app).post("/api/auth/register").set(h).send({
+      name: "Long Password",
+      email,
+      password: "Aa" + "é".repeat(36),
+    });
+    expect(response.status).toBe(400);
+    expect(response.body.message).toContain("72 UTF-8 bytes");
+    expect(await User.exists({ email })).toBeNull();
+  });
   it("rejects unauthorized access and missing CSRF header", async () => {
     expect((await request(app).get("/api/studios/mine")).status).toBe(401);
     expect((await request(app).post("/api/auth/logout")).status).toBe(403);
