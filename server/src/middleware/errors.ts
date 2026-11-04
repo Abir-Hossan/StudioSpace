@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import multer from "multer";
 import { ZodError } from "zod";
+import { uploadLimitMb } from "../config/uploads.js";
 export const handleNotFound = (_req: Request, res: Response) => res.status(404).json({ message: "Endpoint not found" });
 
 export const handleError = (err: unknown, _req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +12,7 @@ export const handleError = (err: unknown, _req: Request, res: Response, next: Ne
     const tooLarge = err.code === "LIMIT_FILE_SIZE";
     return res.status(tooLarge ? 413 : 400).json({
       message: tooLarge
-        ? "Uploaded file exceeds the 10 MB limit"
+        ? `Uploaded file exceeds the ${uploadLimitMb()} MB limit`
         : "Invalid upload request",
     });
   }

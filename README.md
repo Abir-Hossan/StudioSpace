@@ -134,6 +134,8 @@ Google cancellation and token-exchange errors return useful sign-in feedback. Pr
 
 ## Project documentation
 
+- [Vercel deployment guide](docs/VERCEL_DEPLOYMENT.md)
+
 - [Architecture](docs/ARCHITECTURE.md) and [folder structure](docs/FOLDER_STRUCTURE.md)
 - [Component dependency map](docs/COMPONENT_DEPENDENCY_MAP.md)
 - [API reference](docs/API_DOCUMENTATION.md)

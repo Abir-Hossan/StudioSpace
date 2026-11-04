@@ -41,7 +41,7 @@ export const studioSchema = z.object({
   city: z.string().trim().min(2).max(100),
   country: z.string().trim().min(2).max(100),
   images: z
-    .array(z.string().regex(/^\/images\/[a-zA-Z0-9_-]+\.png$/))
+    .array(z.string().regex(/^(?:\/images\/[a-zA-Z0-9_-]+|\/api\/uploads\/upload-[a-f0-9-]{36})\.png$/))
     .min(1)
     .max(12),
   amenities: z.array(z.string().max(60)).max(30),
