@@ -1,12 +1,14 @@
 import "dotenv/config";
 import express from "express";
-import helmetModule = require("helmet");
+import helmet from "helmet";
 import cors from "cors";
 import { client } from "./config/environment.js";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
+
 import { requestProtection } from "./middleware/request-protection.js";
 import { handleNotFound, handleError } from "./middleware/errors.js";
+
 import { mountAuthRoutes } from "./routes/auth.js";
 import { mountHealthRoutes } from "./routes/health.js";
 import { mountStudiosRoutes } from "./routes/studios.js";
@@ -22,7 +24,7 @@ export const app = express();
 app.disable("x-powered-by");
 
 app.use(
-  helmetModule.default(),
+  helmet(),
   cors({ origin: client(), credentials: true }),
   express.json({ limit: "1mb" }),
   cookieParser(),
@@ -30,6 +32,7 @@ app.use(
 );
 
 app.use("/api", requestProtection);
+
 mountAuthRoutes(app);
 mountHealthRoutes(app);
 mountStudiosRoutes(app);
@@ -39,5 +42,6 @@ mountWishlistRoutes(app);
 mountReviewsRoutes(app);
 mountNewsletterRoutes(app);
 mountDashboardRoutes(app);
+
 app.use(handleNotFound);
 app.use(handleError);
