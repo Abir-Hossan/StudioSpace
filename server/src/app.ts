@@ -1,6 +1,7 @@
+
 import "dotenv/config";
 import express from "express";
-import helmet from "helmet";
+import { createRequire } from "node:module";
 import cors from "cors";
 import { client } from "./config/environment.js";
 import cookieParser from "cookie-parser";
@@ -18,6 +19,9 @@ import { mountWishlistRoutes } from "./routes/wishlist.js";
 import { mountReviewsRoutes } from "./routes/reviews.js";
 import { mountNewsletterRoutes } from "./routes/newsletter.js";
 import { mountDashboardRoutes } from "./routes/dashboard.js";
+
+const require = createRequire(import.meta.url);
+const helmet = require("helmet") as () => express.RequestHandler;
 
 export const app = express();
 
