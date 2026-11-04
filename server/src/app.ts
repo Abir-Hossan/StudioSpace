@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import * as helmetModule from "helmet";
+import helmet from "helmet";
 import cors from "cors";
 import { client } from "./config/environment.js";
 import cookieParser from "cookie-parser";
@@ -24,7 +24,7 @@ export const app = express();
 app.disable("x-powered-by");
 
 app.use(
-  helmetModule.default(),
+  helmet(),
   cors({ origin: client(), credentials: true }),
   express.json({ limit: "1mb" }),
   cookieParser(),
