@@ -1,10 +1,10 @@
 import "dotenv/config";
 import express from "express";
-import helmet from "helmet";
+import helmetModule = require("helmet");
 import cors from "cors";
 import { client } from "./config/environment.js";
 import cookieParser from "cookie-parser";
-import rateLimit from "express-rate-limit";
+import { rateLimit } from "express-rate-limit";
 import { requestProtection } from "./middleware/request-protection.js";
 import { handleNotFound, handleError } from "./middleware/errors.js";
 import { mountAuthRoutes } from "./routes/auth.js";
@@ -22,7 +22,7 @@ export const app = express();
 app.disable("x-powered-by");
 
 app.use(
-  helmet(),
+  helmetModule.default(),
   cors({ origin: client(), credentials: true }),
   express.json({ limit: "1mb" }),
   cookieParser(),

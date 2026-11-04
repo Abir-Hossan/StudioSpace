@@ -4,7 +4,7 @@ import { secret } from "../config/environment.js";
 import { fail } from "../utils/http-error.js";
 import { AuthSession, User } from "../models/index.js";
 import { tokenHash } from "../services/session.js";
-import rateLimit from "express-rate-limit";
+import { rateLimit } from "express-rate-limit";
 export const auth: RequestHandler = async (req, _res, next) => {
   const signed = req.cookies.session;
   if (typeof signed !== "string") fail(401, "Sign in to continue");
