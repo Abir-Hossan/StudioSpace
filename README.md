@@ -1,155 +1,312 @@
 # StudioSpace
 
-A local full-stack marketplace for creative studios, film stages, podcast rooms, music suites and art workshops. **Not deployed — local development only.**
+A full-stack marketplace for discovering and booking creative spaces. Creators can explore photo studios, film stages, podcast rooms, music suites and art workshops. Hosts can publish listings and manage booking requests.
 
-## Quick start
+[Live application](https://studio-space-sepia.vercel.app/) · [API health](https://studiospace-api-bice.vercel.app/api/health) · [API reference](docs/API_DOCUMENTATION.md) · [Deployment guide](docs/VERCEL_DEPLOYMENT.md)
 
-Requires Node.js 22.12+, 24, or 26+ (Node 24 LTS recommended), npm, and internet access for the initial dependency/MongoDB binary downloads.
+## Screenshots
 
-```powershell
-npm install --workspaces=false
-npm run prepare:local
-npm run local
-```
+Desktop screenshots from the local design review, using seeded demonstration data. Listings, account names and booking records illustrate the interface; live content may differ.
 
-Open http://localhost:3000. This command starts a real MongoDB single-node replica set backed by a local `work/local-mongo` directory, seeds it if empty, starts Express on port 4000, and runs Next.js on port 3000. It uses `mongodb-memory-server` as a binary launcher with the WiredTiger storage engine and a persistent directory; application data is stored in MongoDB, not in JavaScript arrays. Stop with Ctrl+C. The automatic development secret changes on restart, so log in again after restarting this shortcut.
+### Homepage
 
-`prepare:local` downloads only the MongoDB server executable from MongoDB’s official Windows ZIP using HTTP byte ranges (about 25 MB instead of the full 600 MB archive with debug symbols). On other operating systems, the runtime downloads its normal platform archive on first use. The local runner and API tests detect the prepared Windows executable automatically. Dependencies are shared at the root; `--workspaces=false` avoids Windows workspace-link permissions while preserving separate client/server commands. MongoDB postinstall downloading is disabled in package configuration so installation does not fetch the full Windows archive.
+Studio discovery, production categories and featured spaces.
 
-Development accounts (local only):
+<details>
+<summary>View the full homepage</summary>
 
-| Role    | Email                     | Password    |
-| ------- | ------------------------- | ----------- |
-| Host    | host@studiospace.local    | StudioPass1 |
-| Creator | creator@studiospace.local | StudioPass1 |
+![StudioSpace homepage with studio categories, featured listings and booking information](docs/screenshots/homepage.png)
 
-The seed adds twelve studios with local PNG assets. Ratings start at zero; they are not fabricated reviews.
+</details>
 
-## Use your own MongoDB
+### Studio details
 
-MongoDB transactions require a replica set or Atlas. A standalone MongoDB instance is insufficient. Start a local `mongod` with `--replSet rs0 --dbpath <your-data-directory>`, then run `rs.initiate()` in mongosh. Alternatively use an Atlas development database.
+Image gallery, production specifications, amenities and booking estimates.
 
-Copy `.env.example` to `.env` in the project root, set the connection URI and a cryptographically random JWT secret of at least 32 characters. For the separate workspace commands, copy the same environment file to `server/.env` (dotenv resolves from that workspace’s current directory).
+<details>
+<summary>View the studio details page</summary>
 
-```powershell
-npm run seed
-npm run dev
-```
+![Studio details showing the Whitebox Cyclorama gallery, amenities and booking panel](docs/screenshots/studio-details.png)
 
-For `npm run seed`, put the environment in `server/.env` or export the variables in the shell. Root `npm run local` reads root `.env` through dotenv and can also use Google credentials from that file. Do not commit environment files.
+</details>
+
+### Dashboard
+
+Host workspace with listings, booking activity and production summaries.
+
+![StudioSpace host dashboard with listing totals, booking analytics and demonstration booking records](docs/screenshots/dashboard.png)
 
 ## Features
 
-- Database-backed search, location/category/price filters, sorting and pagination; filters persist in the URL.
-- Password registration and cookie authentication, real Google OAuth integration, private pages and ownership checks.
-- Studio creation, update, deletion and local image upload with PNG conversion.
-- Booking requests with authoritative price snapshots, host confirmation/rejection and pending cancellation.
-- Concurrent conflict prevention, host dashboard, personal booking history and PDF booking summaries.
-- Persistent wishlists, completed-booking reviews, profile editing, theme selection and responsive navigation.
-- Locally persisted newsletter interest with explicit disclosure that email delivery is disabled.
+- **Studio discovery** with search, category, location and price filters, sorting, pagination and shareable filter URLs.
+- **Accounts** with email/password registration, Google sign-in, protected pages and database-backed sessions.
+- **Host workspace** for listing creation, editing, production specifications, image uploads and pause/resume controls.
+- **Booking management** with availability checks, price snapshots, host approval or rejection, creator cancellation and booking history.
+- **Personal workspace** with saved studios, profile editing, completed-booking reviews and booking exports.
+- **Responsive interface** with light and dark themes, mobile navigation, accessible dialogs and reduced-motion support.
 
-## Architecture and dependencies
+## Technology
 
-`client/` is Next.js App Router with TypeScript and React. TanStack Query owns API caching; React Hook Form and Zod validate account forms. The reusable Button uses the shadcn/ui composition pattern (Radix Slot, class-variance-authority, clsx and tailwind-merge); dialogs use Radix for focus containment, Escape and accessible labelling. Motion respects reduced-motion preferences. Swiper provides the three-slide hero. Tailwind’s PostCSS integration and CSS design tokens define both themes. Lucide supplies vector icons and Sonner supplies notifications.
+| Layer | Tools |
+| --- | --- |
+| Frontend | Next.js App Router, React, TypeScript |
+| Interface | Tailwind CSS, Radix UI, Lucide, Motion, Swiper |
+| Forms and API state | React Hook Form, Zod, TanStack Query |
+| Backend | Express 5, TypeScript, Mongoose |
+| Database | MongoDB replica set locally, MongoDB Atlas in production |
+| Authentication | bcrypt, JWT, HTTP-only cookies, Google OAuth |
+| Images and documents | Sharp, PDFKit |
+| Verification | Vitest, Supertest, Playwright, ESLint |
+| Hosting | Separate Vercel frontend and API projects |
 
-`server/` is a separate Express application using Mongoose, Zod, bcrypt, JWT, HTTPOnly cookies, Helmet, restricted CORS and rate limits. All mutations require the custom same-origin request header and an allowed Origin outside tests. Secrets stay on the server. Google credentials use the Google auth library and state-cookie validation; accounts with an existing password are not automatically linked to Google.
+## Architecture
 
-No payments are collected. PDF files are booking summaries, not payment receipts. No insurance or staffed support is claimed.
+The repository uses npm workspaces for the frontend and API.
 
-### Booking concurrency and deletion policy
+~~~text
+StudioSpace/
+├── client/
+│   ├── app/                  Next.js routes and layouts
+│   ├── components/           Shared interface components
+│   ├── features/             Feature-specific screens and interactions
+│   ├── lib/                  API client and frontend utilities
+│   ├── public/               Images and bundled fonts
+│   └── tests/                Browser tests
+├── server/
+│   ├── app.ts                Vercel Express entry point
+│   ├── src/
+│   │   ├── config/           Environment, OAuth and upload configuration
+│   │   ├── controllers/      Request handlers
+│   │   ├── middleware/       Authentication, request and error handling
+│   │   ├── models/           MongoDB models
+│   │   ├── routes/           API route registration
+│   │   ├── services/         Application services
+│   │   └── validators/       Request schemas
+│   └── tests/                API and local startup tests
+├── scripts/                  Build and local database preparation
+└── docs/                     Architecture, API and deployment documentation
+~~~
 
-Pending requests may overlap. Creation, host confirmation and listing deletion use MongoDB transactions. They all write the studio revision before checking related records, making concurrent operations on the same studio conflict and retry. After retry, availability is checked again. The overlap condition is `existing.startTime < requested.endTime && existing.endTime > requested.startTime`. Confirmed sessions cannot overlap; adjacent sessions are allowed.
+The browser sends requests to the frontend's same-origin /api routes. Next.js rewrites those requests to Express using SERVER_URL. Authentication cookies stay on the frontend origin. The API owns database access, session validation, authorization and booking transactions.
 
-Only hosts can confirm/reject pending requests. Hosts can mark ended confirmed bookings completed. Creators can cancel their own pending requests. A studio with any booking history cannot be deleted, preserving references and pricing records. Deleting an unbooked studio also removes its reviews and wishlist entries in the transaction. Reviews require a completed booking and are unique per user/studio.
+## Live environments
 
-### API overview
+| Service | Address |
+| --- | --- |
+| Website | https://studio-space-sepia.vercel.app |
+| API origin | https://studiospace-api-bice.vercel.app |
+| Database health | https://studiospace-api-bice.vercel.app/api/health |
 
-| Area         | Routes                                                                                                         |
-| ------------ | -------------------------------------------------------------------------------------------------------------- |
-| Accounts     | POST `/api/auth/register`, `/login`, `/logout`; GET `/api/auth/me`; GET `/api/auth/google`, `/google/callback` |
-| Studios      | GET/POST `/api/studios`; GET `/featured`, `/mine`; GET/PATCH/DELETE `/api/studios/:id`                         |
-| Availability | GET `/api/studios/:id/availability`                                                                            |
-| Bookings     | POST `/api/bookings`; GET `/mine`, `/host`; PATCH `/:id/cancel`, `/:id/status`; GET `/:id/invoice`             |
-| Profile      | GET/PATCH `/api/users/me`                                                                                      |
-| Saved spaces | GET/POST `/api/wishlist`; DELETE `/api/wishlist/:studioId`                                                     |
-| Reviews      | GET/POST `/api/studios/:id/reviews`                                                                            |
-| Uploads      | POST `/api/uploads`, multipart field `image`, maximum 10 MB                                                    |
-| Other        | GET `/api/dashboard`, `/api/health`; POST `/api/newsletter`                                                    |
+A successful API health response is:
 
-The browser uses a same-origin Next.js rewrite for `/api`, avoiding cross-origin cookie problems. Direct API mutations need `Origin: http://localhost:3000` and `x-studiospace: 1`.
+~~~json
+{
+  "status": "ok",
+  "database": true
+}
+~~~
 
-## Google OAuth setup
+The API exposes specific routes. Its root path returns an endpoint-not-found response because no root handler is defined.
 
-Create a Google Cloud OAuth web client. Configure authorized JavaScript origin `http://localhost:3000`, callback `http://localhost:4000/api/auth/google/callback`, and the consent-screen test users if the app is in testing mode. Set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_CALLBACK_URL` on the server. Google sign-in without credentials returns an informative message. No simulated Google identity is used. Live OAuth cannot be verified without your credentials and consent.
+## Local setup
 
-## Images and design references
+### Requirements
 
-All bundled raster images live in `client/public/images` and are PNG. Sixteen assets were extracted from the supplied `.fig` archive and converted locally. `provenance.json` records their source hashes. Original raster assets are about 512 pixels wide; large displays may expose that resolution limit. Uploads are decoded by Sharp and converted to PNG up to 1920 pixels wide. No image hosting key is required because the configured provider is local disk. Back up that directory along with MongoDB.
+- A Node.js version supported by the root package.json, including Node.js 22.12+ or 24.x.
+- npm and internet access for initial dependency and MongoDB binary downloads.
+- Google OAuth credentials to test Google sign-in.
 
-The supplied Figma import kit’s screenshots and HTML informed charcoal `#131313`, orange `#ff7043`, warm accent `#ffb59f`, twelve-pixel cards, pill navigation and cinematic layouts. The remote Figma page and requirement video were inaccessible to the research tool. The `.fig` was inspected as an archive and its raster resources recovered; editable canvas layers were not parsed. Space Grotesk and Inter weights 400, 500, 600 and 700 are bundled locally under client/public/fonts with their Open Font Licenses. No remote font request is needed.
+### Start with the bundled local database
 
-## Commands and verification
+Run from the repository root:
 
-```powershell
-npm run typecheck
-npm run lint
-npm test
-npm run build
-npx playwright install chromium
-npm run test:e2e
-```
+~~~powershell
+npm install --workspaces=false
+npm run prepare:local
+npm run local
+~~~
 
-API tests start their own real MongoDB replica set. Playwright uses the local server shortcut if no server is running. Use a clean local database for deterministic browser booking/wishlist assertions. See `VERIFICATION.md` for actual executed results, route coverage and limitations. Do not interpret a test file as evidence that its tests passed.
+Open http://localhost:3000. The runner starts a persistent MongoDB replica set, seeds development data, starts Express on port 4000 and starts Next.js on port 3000. Stop it with Ctrl+C.
 
-For the compiled API, run `node server/dist/index.js` from the repository root after exporting environment variables. For the production client, run `npm run start -w client`. Keep the API on port 4000, client on 3000 for this local configuration.
+The database directory defaults to work/local-mongo and MongoDB uses port 27018. The Windows preparation script downloads and verifies the MongoDB executable. Other platforms use the launcher's platform download.
 
-## Reliable implementation references
+The --workspaces=false installation option supports the existing root dependency layout without requiring Windows workspace links.
 
-- [Next.js installation and App Router](https://nextjs.org/docs/app/getting-started/installation)
-- [Mongoose transactions](https://mongoosejs.com/docs/transactions.html)
-- [Google OAuth server flow](https://developers.google.com/identity/protocols/oauth2/web-server)
-- [Radix accessible dialog](https://www.radix-ui.com/primitives/docs/components/dialog)
+### Development accounts
 
-This source is a local development deliverable. Production hardening, legal policies, operational support, account recovery and deployment are outside this project’s scope. The contribution workflow uses a dedicated feature branch. Deployment requires the target environment checks in the development guide.
+The local seed provides these accounts:
 
+| Account | Email | Password |
+| --- | --- | --- |
+| Host | host@studiospace.local | StudioPass1 |
+| Creator | creator@studiospace.local | StudioPass1 |
 
-### Persistent MongoDB restart fix
+Use these accounts with a development database. Production users register through the application. The local runner generates a signing secret when one is absent, so a restart can require signing in again.
 
-The local launcher uses port 27018 and repairs a stale single-node localhost replica-set address left by earlier random-port versions. It retains the existing database. Set LOCAL_MONGO_PORT to another free port if needed. A restart regression test verifies record persistence, port migration and transactions.
+### Use an existing database
 
+Bookings use MongoDB transactions, so use a replica set or MongoDB Atlas. Export MONGODB_URI, JWT_SECRET and CLIENT_URL in your shell, then run npm run dev from the repository root. The separate API workspace also loads server/.env.
 
-## Reference-design corrections
+A local server/.env can contain:
 
-See DESIGN-AUDIT.md for the page-by-page comparison and restored desktop/mobile arrangements. The application now includes photographic category cards, production-specification layouts, the dedicated workspace shell, expanded profile panels, mobile filtering and bottom navigation, real CSV/ICS/PDF exports, listing pause/resume, and device-local studio drafts. Existing database records are preserved; missing host specifications remain clearly identified.
+~~~dotenv
+MONGODB_URI=mongodb://127.0.0.1:27017/studiospace?replicaSet=rs0
+JWT_SECRET=replace-with-a-random-secret-of-at-least-32-characters
+CLIENT_URL=http://localhost:3000
+~~~
 
+The MongoDB instance in this example must already be configured as a replica set. For Atlas, use its connection string with the intended database name.
 
+Run npm run seed only to populate a development database. The bundled npm run local runner manages its own local database.
 
-## Full QA and social integration — 2 November 2026
+## Environment variables
 
-See FULL-QA-REPORT.md for the latest evidence and production blockers. The footer links to the four platform home pages supplied by the owner; these are not StudioSpace accounts. Sessions now have hashed database records with seven-day expiry and per-session logout revocation. Existing sessions issued before this update must sign in again. MongoDB creates the AuthSession unique and TTL indexes; expiry is checked on every authenticated request rather than relying on TTL cleanup timing.
+Keep private values in local environment files or Vercel environment settings.
 
-Google cancellation and token-exchange errors return useful sign-in feedback. Provider-mocked tests exercise account creation/reuse and reject unverified identities, but live Google consent and the resulting callback still require an account-holder sign-in. Local credentials were detected and the real Google handoff was verified during this audit. Targeted Zod, Sharp and Vitest upgrades remove the high/critical findings; consult the report for the remaining development-tool advisories.
+| Variable | Location | Purpose |
+| --- | --- | --- |
+| MONGODB_URI | API | MongoDB connection string with the intended database name |
+| JWT_SECRET | API | Random session-signing secret of at least 32 characters |
+| CLIENT_URL | API | Exact frontend origin without a trailing slash |
+| UPLOAD_STORAGE | API | Set to mongodb for hosted image persistence |
+| SERVER_URL | Frontend | API origin used by Next.js rewrites, without an /api suffix |
+| GOOGLE_CLIENT_ID | API | Google OAuth web client ID |
+| GOOGLE_CLIENT_SECRET | API | Google OAuth web client secret |
+| GOOGLE_CALLBACK_URL | API | Registered Google callback URL |
+| PORT, API_PORT | Local runner | Frontend and API port overrides |
+| LOCAL_MONGO_PORT, LOCAL_MONGO_DB_PATH | Local runner | Database port and persistent directory |
+| NEXT_DIST_DIR, STUDIOSPACE_TEST_URL | Development and tests | Alternate Next.js output directory and browser test origin |
 
+For Google sign-in with npm run local, export the OAuth variables before starting the runner.
 
+## Vercel deployment
 
-## Project documentation
+Create separate API and frontend projects connected to this repository.
 
-- [Vercel deployment guide](docs/VERCEL_DEPLOYMENT.md)
+| Setting | API project | Frontend project |
+| --- | --- | --- |
+| Root directory | server | client |
+| Framework | Express | Next.js |
+| Install and build settings | Preset defaults | Preset defaults |
+| Database connection | MONGODB_URI | — |
+| Signing secret | JWT_SECRET | — |
+| Frontend origin | CLIENT_URL=https://studio-space-sepia.vercel.app | — |
+| Image storage | UPLOAD_STORAGE=mongodb | — |
+| API origin | — | SERVER_URL=https://studiospace-api-bice.vercel.app |
 
-- [Architecture](docs/ARCHITECTURE.md) and [folder structure](docs/FOLDER_STRUCTURE.md)
+Enable access to source files outside the root directory for workspace dependencies and shared build scripts. Configure Atlas network access for the deployed API.
+
+Deploy the API first, verify /api/health, then deploy the frontend. Changing SERVER_URL requires rebuilding the frontend because the rewrite target is configured at build time. API environment changes require redeploying the API.
+
+The server build uses tsconfig.build.json to exclude the local MongoDB launcher from production compilation. Hosted requests enter through server/app.ts and connect to Atlas on demand.
+
+See the [deployment guide](docs/VERCEL_DEPLOYMENT.md) for networking, preview environments and upload migration.
+
+## Google sign-in
+
+Create a Web application OAuth client in Google Cloud. Register this production callback under authorized redirect URIs and set the API's GOOGLE_CALLBACK_URL to the same value:
+
+~~~text
+https://studio-space-sepia.vercel.app/api/auth/google/callback
+~~~
+
+Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in the API project and redeploy. When Google's consent configuration is in testing mode, add the intended test accounts.
+
+The callback uses the frontend origin so the OAuth state cookie and resulting session remain on the origin used by the browser. The API verifies Google tokens and email verification. Existing password accounts require their original sign-in method.
+
+For local development through the frontend proxy, register http://localhost:3000/api/auth/google/callback separately and use that value for GOOGLE_CALLBACK_URL.
+
+Google requires an exact match between the requested and registered redirect URI. See the [official OAuth server flow](https://developers.google.com/identity/protocols/oauth2/web-server).
+
+## API overview
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| GET | /api/health | API and database connection status |
+| POST | /api/auth/register | Create a password account |
+| POST | /api/auth/login | Start a session |
+| POST | /api/auth/logout | Revoke the current session |
+| GET | /api/auth/me | Read the signed-in user |
+| GET | /api/auth/google | Begin Google sign-in |
+| GET | /api/auth/google/callback | Complete Google sign-in |
+| GET, PATCH | /api/users/me | Read or update the profile |
+| GET, POST | /api/studios | Search studios or create a listing |
+| GET, PATCH, DELETE | /api/studios/:id | Read, edit or delete a listing |
+| GET | /api/studios/:id/availability | Check availability |
+| POST | /api/bookings | Request a booking |
+| GET | /api/bookings/mine | Read personal bookings |
+| GET | /api/bookings/host | Read bookings for owned studios |
+| GET, POST | /api/wishlist | Read or add saved studios |
+| GET, POST | /api/studios/:id/reviews | Read or submit reviews |
+| POST | /api/uploads | Upload an image |
+
+Mutations require an allowed Origin and the x-studiospace header set to 1. Protected routes also require a valid session cookie. The frontend API client supplies the header and cookie credentials.
+
+See the [API reference](docs/API_DOCUMENTATION.md) for additional routes, payloads and access rules.
+
+## Data integrity and security
+
+Sessions have signed HTTP-only cookies and hashed database records with expiry and per-session logout revocation. Production cookies use Secure and SameSite=Lax. Middleware checks session validity and account existence before granting access.
+
+Studio changes and booking actions enforce ownership. Booking creation, confirmation and listing deletion use MongoDB transactions with conflict retries. Confirmed bookings cannot overlap. Adjacent bookings are allowed.
+
+Listings with booking history cannot be deleted. Reviews require a completed booking and are limited to one per user and studio. Passwords are hashed with bcrypt. Request validation, rate limits, security headers and origin checks protect the API.
+
+## Images and storage
+
+Bundled images live in client/public/images. User uploads are decoded with Sharp, resized up to 1920 pixels wide without enlargement and converted to PNG.
+
+| Environment | Storage | Upload limit |
+| --- | --- | --- |
+| Local development | client/public/images | 10 MiB |
+| Hosted API | MongoDB | 4 MiB |
+
+Hosted requests must also fit Vercel's payload limit, including multipart overhead. Existing local upload files need migration when their listings move to the hosted database.
+
+Fonts are bundled under client/public/fonts with their licenses. Asset and design review details are recorded in [DESIGN-AUDIT.md](DESIGN-AUDIT.md).
+
+## Development commands
+
+Run from the repository root unless stated otherwise.
+
+| Command | Purpose |
+| --- | --- |
+| npm run local | Start the local database, API and frontend |
+| npm run prepare:local | Prepare the local MongoDB executable |
+| npm run dev | Start both workspaces against a configured database |
+| npm run seed | Seed a development database |
+| npm run typecheck | Check both workspaces |
+| npm run lint | Run ESLint |
+| npm test | Run Vitest tests |
+| npm run test:e2e | Run Playwright browser tests |
+| npm run build | Build the API and frontend |
+| npm run build -w server | Build the production API |
+| npm run start -w client | Start the compiled Next.js application |
+
+API tests use their own MongoDB replica set. Playwright starts the local application when needed and can reuse a running server. On Windows it uses installed Google Chrome. On other platforms, install Chromium with npx playwright install chromium before running browser tests.
+
+After building, a separate Node.js API can be started with node server/dist/src/index.js from the repository root with the environment exported. Vercel uses the default export in server/app.ts.
+
+Historical verification reports record checks performed at the time of each audit. Run the relevant checks for your changes.
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Folder structure](docs/FOLDER_STRUCTURE.md)
 - [Component dependency map](docs/COMPONENT_DEPENDENCY_MAP.md)
 - [API reference](docs/API_DOCUMENTATION.md)
-- [Development and deployment guide](docs/DEVELOPMENT_GUIDE.md)
-- [Coding standards](docs/CODING_STANDARDS.md) and [contribution workflow](docs/GIT_WORKFLOW.md)
-- [Implementation report](docs/REFACTORING_LOG.md)
-- [Release audit and deployment gates](docs/RELEASE_AUDIT.md)
+- [Development guide](docs/DEVELOPMENT_GUIDE.md)
+- [Vercel deployment](docs/VERCEL_DEPLOYMENT.md)
+- [Coding standards](docs/CODING_STANDARDS.md)
+- [Git workflow](docs/GIT_WORKFLOW.md)
+- [Release audit](docs/RELEASE_AUDIT.md)
+- [Verification report](VERIFICATION.md)
+- [Design audit](DESIGN-AUDIT.md)
 
-| Environment variable | Purpose |
-| --- | --- |
-| MONGODB_URI | Replica set connection for the separate API process |
-| JWT_SECRET | Private signing secret of at least 32 characters |
-| CLIENT_URL | Allowed frontend origin and OAuth return origin |
-| SERVER_URL | Express target baked into Next's API rewrite at build time |
-| GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL | Google OAuth web-client configuration |
-| PORT, API_PORT, LOCAL_MONGO_PORT, LOCAL_MONGO_DB_PATH | Local runner ports and persistent database directory |
-| NEXT_DIST_DIR, STUDIOSPACE_TEST_URL | Isolated Next output and browser test URL |
+## Contributions and scope
+
+Use a focused feature branch, follow the existing architecture and run checks relevant to your changes before opening a pull request. Review the [coding standards](docs/CODING_STANDARDS.md) and [Git workflow](docs/GIT_WORKFLOW.md).
+
+StudioSpace supports studio discovery and booking management. Payment collection, transactional email delivery and account recovery are outside the current implementation. Booking PDFs summarize bookings. Footer social links currently lead to platform homepages.
+
+A repository-wide software license has not been provided. Bundled font licenses remain with their assets.
